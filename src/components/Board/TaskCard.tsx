@@ -1,16 +1,38 @@
-
 import type { Task } from '../../context/types';
 import styles from './Board.module.css';
 import clsx from 'clsx';
 import { Calendar } from 'lucide-react';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 
 interface TaskCardProps {
     task: Task;
 }
 
 const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
+    const {
+        attributes,
+        listeners,
+        setNodeRef,
+        transform,
+        transition,
+        isDragging,
+    } = useSortable({ id: task.id, data: { type: 'Task', task } });
+
+    const style = {
+        transform: CSS.Transform.toString(transform),
+        transition,
+        opacity: isDragging ? 0.5 : 1,
+    };
+
     return (
-        <div className={styles.card}>
+        <div
+            ref={setNodeRef}
+            style={style}
+            {...attributes}
+            {...listeners}
+            className={styles.card}
+        >
             <div className={styles.cardTitle}>{task.title}</div>
             {task.description && <div className={styles.cardDescription}>{task.description}</div>}
 
