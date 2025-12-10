@@ -5,7 +5,7 @@ import styles from './Board.module.css';
 import { MoreHorizontal, Plus } from 'lucide-react';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { useDroppable } from '@dnd-kit/core';
-import CreateTaskModal from './CreateTaskModal';
+import TaskModal from './TaskModal';
 
 interface ColumnProps {
     column: ColumnType;
@@ -49,7 +49,7 @@ const Column: React.FC<ColumnProps> = ({ column, tasks }) => {
                 </div>
             </div>
 
-            <CreateTaskModal
+            <TaskModal
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
                 columnId={column.id}

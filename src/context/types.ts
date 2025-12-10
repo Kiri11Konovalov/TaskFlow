@@ -33,7 +33,8 @@ export type Action =
     | { type: 'MOVE_TASK'; payload: { projectId: string; sourceColId: string; destColId: string; sourceIndex: number; destIndex: number; taskId: string } }
     | { type: 'ADD_PROJECT'; payload: { project: Project } }
     | { type: 'SET_CURRENT_PROJECT'; payload: { projectId: string } }
-    | { type: 'DELETE_TASK'; payload: { projectId: string; columnId: string; taskId: string } };
+    | { type: 'DELETE_TASK'; payload: { projectId: string; columnId: string; taskId: string } }
+    | { type: 'EDIT_TASK'; payload: { projectId: string; task: Task } };
 
 export interface BoardContextType {
     state: BoardState;

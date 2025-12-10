@@ -123,6 +123,24 @@ const boardReducer = (state: BoardState, action: Action): BoardState => {
                 },
             };
         }
+        case 'EDIT_TASK': {
+            const { projectId, task } = action.payload;
+            const project = state.projects[projectId];
+
+            return {
+                ...state,
+                projects: {
+                    ...state.projects,
+                    [projectId]: {
+                        ...project,
+                        tasks: {
+                            ...project.tasks,
+                            [task.id]: task,
+                        },
+                    },
+                },
+            };
+        }
         default:
             return state;
     }
