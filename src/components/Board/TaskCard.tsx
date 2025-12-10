@@ -1,0 +1,30 @@
+
+import type { Task } from '../../context/types';
+import styles from './Board.module.css';
+import clsx from 'clsx';
+import { Calendar } from 'lucide-react';
+
+interface TaskCardProps {
+    task: Task;
+}
+
+const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
+    return (
+        <div className={styles.card}>
+            <div className={styles.cardTitle}>{task.title}</div>
+            {task.description && <div className={styles.cardDescription}>{task.description}</div>}
+
+            <div className={styles.cardFooter}>
+                <div className={clsx(styles.priorityTag, styles[task.priority])}>
+                    {task.priority === 'high' ? 'Высокий' : task.priority === 'medium' ? 'Средний' : 'Низкий'}
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 4, color: 'var(--color-text-secondary)', fontSize: '0.75rem' }}>
+                    <Calendar size={12} />
+                    <span>{new Date(task.createdAt).toLocaleDateString()}</span>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default TaskCard;

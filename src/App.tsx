@@ -1,15 +1,24 @@
-import React from 'react';
 import './styles/global.css';
-import { BoardProvider, useBoard } from './context/BoardContext';
+import { BoardProvider } from './context/BoardContext';
+import Sidebar from './components/Layout/Sidebar';
+import KanbanBoard from './components/Board/KanbanBoard';
+import styles from './components/Layout/Layout.module.css';
+import { Settings, User } from 'lucide-react';
 
-const DebugView = () => {
-  const { state } = useBoard();
+const AppContent = () => {
   return (
-    <div style={{ padding: '2rem' }}>
-      <h1>TaskFlow</h1>
-      <pre style={{ background: '#334155', padding: '1rem', borderRadius: '0.5rem', marginTop: '1rem' }}>
-        {JSON.stringify(state, null, 2)}
-      </pre>
+    <div className={styles.container}>
+      <Sidebar />
+      <main className={styles.main}>
+        <header className={styles.header}>
+          <div className={styles.headerTitle}>Доска задач</div>
+          <div style={{ display: 'flex', gap: '1rem', color: 'var(--color-text-secondary)' }}>
+            <Settings size={20} style={{ cursor: 'pointer' }} />
+            <User size={20} style={{ cursor: 'pointer' }} />
+          </div>
+        </header>
+        <KanbanBoard />
+      </main>
     </div>
   );
 };
@@ -17,7 +26,7 @@ const DebugView = () => {
 function App() {
   return (
     <BoardProvider>
-      <DebugView />
+      <AppContent />
     </BoardProvider>
   );
 }
