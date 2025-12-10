@@ -1,0 +1,70 @@
+.overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.backdrop {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+}
+
+.modal {
+    background-color: var(--color-bg-secondary);
+    width: 100%;
+    max-width: 500px;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    position: relative;
+    z-index: 10;
+    transform: scale(0.95);
+    transition: transform 0.3s ease;
+    border: 1px solid var(--color-bg-card);
+}
+
+.overlay.open .modal {
+    transform: scale(1);
+}
+
+.header {
+    padding: var(--spacing-lg);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--color-bg-card);
+}
+
+.title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+}
+
+.closeButton {
+    color: var(--color-text-secondary);
+    transition: color 0.2s;
+    padding: 4px;
+    border-radius: 4px;
+}
+
+.closeButton:hover {
+    color: var(--color-text-primary);
+    background-color: var(--color-bg-card);
+}
+
+.content {
+    padding: var(--spacing-lg);
+}

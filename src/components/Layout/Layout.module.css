@@ -76,3 +76,55 @@
     font-weight: 600;
     color: var(--color-text-primary);
 }
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 60px;
+        padding: var(--spacing-sm);
+        align-items: center;
+    }
+
+    .logo span {
+        display: none;
+    }
+
+    .logo {
+        justify-content: center;
+        margin-bottom: var(--spacing-lg);
+    }
+
+    .projectList span {
+        display: none;
+    }
+
+    .projectItem {
+        justify-content: center;
+        padding: var(--spacing-sm);
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        height: auto;
+        flex-direction: row;
+        overflow-x: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--color-bg-card);
+        padding: var(--spacing-sm);
+    }
+
+    .projectList {
+        flex-direction: row;
+    }
+
+    .logo {
+        margin-bottom: 0;
+        margin-right: var(--spacing-md);
+    }
+}

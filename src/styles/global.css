@@ -1,18 +1,30 @@
+@import './animations.css';
+
 :root {
   /* Premium Dark Theme Palette */
-  --color-bg-primary: #0f172a; /* Slate 900 */
-  --color-bg-secondary: #1e293b; /* Slate 800 */
-  --color-bg-card: #334155; /* Slate 700 */
-  
-  --color-text-primary: #f8fafc; /* Slate 50 */
-  --color-text-secondary: #94a3b8; /* Slate 400 */
-  
-  --color-accent: #6366f1; /* Indigo 500 */
-  --color-accent-hover: #4f46e5; /* Indigo 600 */
-  
-  --color-danger: #ef4444; /* Red 500 */
-  --color-success: #22c55e; /* Green 500 */
-  --color-warning: #eab308; /* Yellow 500 */
+  --color-bg-primary: #0f172a;
+  /* Slate 900 */
+  --color-bg-secondary: #1e293b;
+  /* Slate 800 */
+  --color-bg-card: #334155;
+  /* Slate 700 */
+
+  --color-text-primary: #f8fafc;
+  /* Slate 50 */
+  --color-text-secondary: #94a3b8;
+  /* Slate 400 */
+
+  --color-accent: #6366f1;
+  /* Indigo 500 */
+  --color-accent-hover: #4f46e5;
+  /* Indigo 600 */
+
+  --color-danger: #ef4444;
+  /* Red 500 */
+  --color-success: #22c55e;
+  /* Green 500 */
+  --color-warning: #eab308;
+  /* Yellow 500 */
 
   /* Spacing */
   --spacing-xs: 0.25rem;
@@ -31,7 +43,7 @@
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-  
+
   /* Transitions */
   --transition-fast: 150ms ease-in-out;
   --transition-normal: 300ms ease-in-out;

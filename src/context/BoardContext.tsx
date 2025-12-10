@@ -98,6 +98,31 @@ const boardReducer = (state: BoardState, action: Action): BoardState => {
         case 'SET_CURRENT_PROJECT': {
             return { ...state, currentProjectId: action.payload.projectId };
         }
+        case 'DELETE_TASK': {
+            const { projectId, columnId, taskId } = action.payload;
+            const project = state.projects[projectId];
+            const column = project.columns[columnId];
+            const newTasks = { ...project.tasks };
+            delete newTasks[taskId];
+
+            return {
+                ...state,
+                projects: {
+                    ...state.projects,
+                    [projectId]: {
+                        ...project,
+                        tasks: newTasks,
+                        columns: {
+                            ...project.columns,
+                            [columnId]: {
+                                ...column,
+                                taskIds: column.taskIds.filter((id) => id !== taskId),
+                            },
+                        },
+                    },
+                },
+            };
+        }
         default:
             return state;
     }

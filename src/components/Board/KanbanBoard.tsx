@@ -126,7 +126,7 @@ const KanbanBoard = () => {
             onDragOver={handleDragOver}
             onDragEnd={handleDragEnd}
         >
-            <div className={styles.boardContainer}>
+            <div className={`${styles.boardContainer} fadeIn`}>
                 {project.columnOrder.map((columnId) => {
                     const column = project.columns[columnId];
                     const tasks = column.taskIds.map((taskId) => project.tasks[taskId]);
