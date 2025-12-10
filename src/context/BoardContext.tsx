@@ -128,8 +128,26 @@ const boardReducer = (state: BoardState, action: Action): BoardState => {
     }
 };
 
+const STORAGE_KEY = 'taskflow-storage-v1';
+
 export const BoardProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-    const [state, dispatch] = useReducer(boardReducer, initialData);
+    const [state, dispatch] = useReducer(boardReducer, initialData, (initial) => {
+        try {
+            const stored = localStorage.getItem(STORAGE_KEY);
+            return stored ? JSON.parse(stored) : initial;
+        } catch (error) {
+            console.error('Failed to load from localStorage:', error);
+            return initial;
+        }
+    });
+
+    React.useEffect(() => {
+        try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        } catch (error) {
+            console.error('Failed to save to localStorage:', error);
+        }
+    }, [state]);
 
     return (
         <BoardContext.Provider value={{ state, dispatch }}>
