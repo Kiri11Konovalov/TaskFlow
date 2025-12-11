@@ -127,12 +127,23 @@ const KanbanBoard = () => {
             onDragEnd={handleDragEnd}
         >
             <div className={`${styles.boardContainer} fadeIn`}>
-                {project.columnOrder.map((columnId) => {
-                    const column = project.columns[columnId];
-                    const tasks = column.taskIds.map((taskId) => project.tasks[taskId]);
+                <div className={styles.boardContent}>
+                    {project.columnOrder.map((columnId) => {
+                        const column = project.columns[columnId];
+                        const tasks = column.taskIds
+                            .map((taskId) => project.tasks[taskId])
+                            .filter(task => {
+                                if (!state.searchQuery) return true;
+                                const query = state.searchQuery.toLowerCase();
+                                return (
+                                    task.title.toLowerCase().includes(query) ||
+                                    (task.description && task.description.toLowerCase().includes(query))
+                                );
+                            });
 
-                    return <Column key={column.id} column={column} tasks={tasks} />;
-                })}
+                        return <Column key={column.id} column={column} tasks={tasks} />;
+                    })}
+                </div>
             </div>
 
             {createPortal(

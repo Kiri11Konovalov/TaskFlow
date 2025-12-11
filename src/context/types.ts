@@ -26,6 +26,7 @@ export interface Project {
 export interface BoardState {
     projects: { [key: string]: Project };
     currentProjectId: string | null;
+    searchQuery: string;
 }
 
 export type Action =
@@ -36,7 +37,8 @@ export type Action =
     | { type: 'DELETE_TASK'; payload: { projectId: string; columnId: string; taskId: string } }
     | { type: 'EDIT_TASK'; payload: { projectId: string; task: Task } }
     | { type: 'EDIT_PROJECT'; payload: { projectId: string; name: string } }
-    | { type: 'DELETE_PROJECT'; payload: { projectId: string } };
+    | { type: 'DELETE_PROJECT'; payload: { projectId: string } }
+    | { type: 'SET_SEARCH_QUERY'; payload: { query: string } };
 
 export interface BoardContextType {
     state: BoardState;

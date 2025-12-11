@@ -4,12 +4,17 @@
     overflow-y: hidden;
     padding: var(--spacing-xl);
     display: flex;
-    gap: var(--spacing-lg);
-    align-items: flex-start;
 
-    /* Scrollbar Styling */
     scrollbar-width: thin;
     scrollbar-color: var(--color-bg-card) transparent;
+}
+
+.boardContent {
+    display: flex;
+    gap: var(--spacing-lg);
+    align-items: flex-start;
+    margin: 0 auto;
+    min-width: min-content;
 }
 
 .boardContainer::-webkit-scrollbar {
@@ -70,7 +75,6 @@
     gap: var(--spacing-md);
     flex: 1;
 
-    /* Scrollbar Styling */
     scrollbar-width: thin;
     scrollbar-color: var(--color-bg-card) transparent;
 }

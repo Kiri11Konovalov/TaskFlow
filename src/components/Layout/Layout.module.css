@@ -84,9 +84,12 @@
 }
 
 .headerTitle {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: var(--color-text-primary);
+    font-size: 1.5rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--color-text-primary) 0%, var(--color-accent) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.02em;
 }
 
 /* Responsive Design */

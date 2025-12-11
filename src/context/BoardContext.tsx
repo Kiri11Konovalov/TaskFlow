@@ -5,6 +5,7 @@ import type { BoardState, Action, BoardContextType } from './types';
 // Начальные данные (Initial Data)
 const initialData: BoardState = {
     currentProjectId: 'project-1',
+    searchQuery: '',
     projects: {
         'project-1': {
             id: 'project-1',
@@ -183,6 +184,9 @@ const boardReducer = (state: BoardState, action: Action): BoardState => {
                 currentProjectId: newCurrentId,
             };
         }
+        case 'SET_SEARCH_QUERY': {
+            return { ...state, searchQuery: action.payload.query };
+        }
         default:
             return state;
     }
@@ -194,7 +198,7 @@ export const BoardProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     const [state, dispatch] = useReducer(boardReducer, initialData, (initial) => {
         try {
             const stored = localStorage.getItem(STORAGE_KEY);
-            return stored ? JSON.parse(stored) : initial;
+            return stored ? { ...JSON.parse(stored), searchQuery: '' } : initial;
         } catch (error) {
             console.error('Failed to load from localStorage:', error);
             return initial;
@@ -203,7 +207,9 @@ export const BoardProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
     React.useEffect(() => {
         try {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            const { searchQuery, ...stateToSave } = state;
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(stateToSave));
         } catch (error) {
             console.error('Failed to save to localStorage:', error);
         }
