@@ -1,73 +1,62 @@
-# React + TypeScript + Vite
+# TaskFlow - Kanban Board Application
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**TaskFlow** — это современное и интуитивно понятное веб-приложение для управления задачами по методологии Kanban. Создавайте проекты, управляйте колонками и задачами с помощью удобного интерфейса Drag & Drop.
 
-Currently, two official plugins are available:
+**[Демо на GitHub Pages](https://Kiri11Konovalov.github.io/TaskFlow)**
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## Возможности
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+*   **Управление проектами**: Создавайте неограниченное количество проектов для разных целей.
+*   **Drag & Drop**: Перетаскивайте задачи между колонками и меняйте их порядок внутри колонки.
+*   **CRUD операции**: Полный цикл управления задачами и колонками (создание, чтение, обновление, удаление).
+*   **Импорт и Экспорт**: Сохраняйте данные в JSON и восстанавливайте их на любом устройстве.
+*   **Поиск**: Быстрая фильтрация задач по названию.
 
-## Expanding the ESLint configuration
+## Установка и запуск
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+1.  **Клонируйте репозиторий**:
+    ```bash
+    git clone https://github.com/Kiri11Konovalov/TaskFlow.git
+    cd TaskFlow
+    ```
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+2.  **Установите зависимости**:
+    ```bash
+    npm install
+    ```
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+3.  **Запустите сервер разработки**:
+    ```bash
+    npm run dev
+    ```
+    Приложение будет доступно по адресу `http://localhost:5173`.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Тестирование
+
+Проект покрыт Unit-тестами для проверки корректности бизнес-логики.
+
+**Запуск тестов:**
+```bash
+npm run test
+# или
+npx vitest run
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Тесты проверяют:
+*   Создание, переименование и удаление проектов.
+*   Добавление, редактирование, удаление и перемещение задач.
+*   Логику импорта данных и управления колонками.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Сборка для продакшена
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Для создания оптимизированной сборки выполните:
+
+```bash
+npm run build
 ```
+
+Файлы будут созданы в директории `dist`.
+
+---
