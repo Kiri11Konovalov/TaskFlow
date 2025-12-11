@@ -38,7 +38,10 @@ export type Action =
     | { type: 'EDIT_TASK'; payload: { projectId: string; task: Task } }
     | { type: 'EDIT_PROJECT'; payload: { projectId: string; name: string } }
     | { type: 'DELETE_PROJECT'; payload: { projectId: string } }
-    | { type: 'SET_SEARCH_QUERY'; payload: { query: string } };
+    | { type: 'SET_SEARCH_QUERY'; payload: { query: string } }
+    | { type: 'SORT_COLUMN'; payload: { projectId: string; columnId: string; sortType: 'priority' | 'date' } }
+    | { type: 'RENAME_COLUMN'; payload: { projectId: string; columnId: string; newTitle: string } }
+    | { type: 'CLEAR_COLUMN'; payload: { projectId: string; columnId: string } };
 
 export interface BoardContextType {
     state: BoardState;

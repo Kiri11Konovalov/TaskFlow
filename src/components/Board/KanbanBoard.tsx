@@ -141,7 +141,7 @@ const KanbanBoard = () => {
                                 );
                             });
 
-                        return <Column key={column.id} column={column} tasks={tasks} />;
+                        return <Column key={column.id} column={column} tasks={tasks} projectId={project.id} />;
                     })}
                 </div>
             </div>

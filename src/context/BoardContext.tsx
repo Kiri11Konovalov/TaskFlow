@@ -187,6 +187,100 @@ const boardReducer = (state: BoardState, action: Action): BoardState => {
         case 'SET_SEARCH_QUERY': {
             return { ...state, searchQuery: action.payload.query };
         }
+        case 'SORT_COLUMN': {
+            const { projectId, columnId, sortType } = action.payload;
+            const project = state.projects[projectId];
+            const column = project.columns[columnId];
+            const tasks = project.tasks;
+
+            const sortedTaskIds = [...column.taskIds].sort((a, b) => {
+                const taskA = tasks[a];
+                const taskB = tasks[b];
+
+                if (sortType === 'priority') {
+                    const priorityMap = { high: 3, medium: 2, low: 1 };
+                    return priorityMap[taskB.priority] - priorityMap[taskA.priority];
+                } else if (sortType === 'date') {
+                    return new Date(taskB.createdAt).getTime() - new Date(taskA.createdAt).getTime();
+                }
+                return 0;
+            });
+
+            return {
+                ...state,
+                projects: {
+                    ...state.projects,
+                    [projectId]: {
+                        ...project,
+                        columns: {
+                            ...project.columns,
+                            [columnId]: {
+                                ...column,
+                                taskIds: sortedTaskIds,
+                            },
+                        },
+                    },
+                },
+            };
+        }
+        case 'RENAME_COLUMN': {
+            const { projectId, columnId, newTitle } = action.payload;
+            const project = state.projects[projectId];
+
+            return {
+                ...state,
+                projects: {
+                    ...state.projects,
+                    [projectId]: {
+                        ...project,
+                        columns: {
+                            ...project.columns,
+                            [columnId]: {
+                                ...project.columns[columnId],
+                                title: newTitle
+                            }
+                        }
+                    }
+                }
+            };
+        }
+        case 'CLEAR_COLUMN': {
+            const { projectId, columnId } = action.payload;
+            const project = state.projects[projectId];
+
+            // We should also delete the tasks from the tasks object to avoid orphans,
+            // OR just remove them from the column if we want to keep them in "archive" (but we don't have archive).
+            // For now, let's just empty the column. Real deletion of tasks is complex if they are only referenced here.
+            // Actually, best practice is to remove them from project.tasks too to clean up.
+
+            const taskIdsToRemove = new Set(project.columns[columnId].taskIds);
+            const newTasks = { ...project.tasks };
+
+            // Remove tasks that are in this column
+            Object.keys(newTasks).forEach(taskId => {
+                if (taskIdsToRemove.has(taskId)) {
+                    delete newTasks[taskId];
+                }
+            });
+
+            return {
+                ...state,
+                projects: {
+                    ...state.projects,
+                    [projectId]: {
+                        ...project,
+                        tasks: newTasks,
+                        columns: {
+                            ...project.columns,
+                            [columnId]: {
+                                ...project.columns[columnId],
+                                taskIds: [],
+                            },
+                        },
+                    },
+                },
+            };
+        }
         default:
             return state;
     }
