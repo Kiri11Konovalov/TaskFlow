@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useBoard } from '../../context/BoardContext';
 import Column from './Column';
 import styles from './Board.module.css';
@@ -10,14 +10,12 @@ import {
     PointerSensor,
     DragOverlay,
     type DragStartEvent,
-    type DragOverEvent,
     type DragEndEvent,
     defaultDropAnimationSideEffects,
     type DropAnimation,
 } from '@dnd-kit/core';
 import TaskCard from './TaskCard';
 import { createPortal } from 'react-dom';
-import { Plus } from 'lucide-react';
 
 const dropAnimation: DropAnimation = {
     sideEffects: defaultDropAnimationSideEffects({
@@ -47,7 +45,7 @@ const KanbanBoard = () => {
         setActiveId(event.active.id as string);
     };
 
-    const handleDragOver = (event: DragOverEvent) => {
+    const handleDragOver = () => {
         // В будущем можно добавить логику
     };
 

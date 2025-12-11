@@ -73,6 +73,7 @@ const Sidebar = () => {
 
     const fileInputRef = useRef<HTMLInputElement>(null);
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [pendingImport, setPendingImport] = useState<any>(null);
     const [isImportConfirmOpen, setIsImportConfirmOpen] = useState(false);
 
