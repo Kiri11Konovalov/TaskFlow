@@ -41,6 +41,8 @@ export type Action =
     | { type: 'SET_SEARCH_QUERY'; payload: { query: string } }
     | { type: 'SORT_COLUMN'; payload: { projectId: string; columnId: string; sortType: 'priority' | 'date' } }
     | { type: 'RENAME_COLUMN'; payload: { projectId: string; columnId: string; newTitle: string } }
+    | { type: 'ADD_COLUMN'; payload: { projectId: string; title: string } }
+    | { type: 'DELETE_COLUMN'; payload: { projectId: string; columnId: string } }
     | { type: 'CLEAR_COLUMN'; payload: { projectId: string; columnId: string } };
 
 export interface BoardContextType {

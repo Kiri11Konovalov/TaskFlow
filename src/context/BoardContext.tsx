@@ -244,6 +244,60 @@ const boardReducer = (state: BoardState, action: Action): BoardState => {
                 }
             };
         }
+        case 'ADD_COLUMN': {
+            const { projectId, title } = action.payload;
+            const project = state.projects[projectId];
+            const newColumnId = `col-${Date.now()}`;
+
+            return {
+                ...state,
+                projects: {
+                    ...state.projects,
+                    [projectId]: {
+                        ...project,
+                        columns: {
+                            ...project.columns,
+                            [newColumnId]: {
+                                id: newColumnId,
+                                title: title,
+                                taskIds: []
+                            }
+                        },
+                        columnOrder: [...project.columnOrder, newColumnId]
+                    }
+                }
+            };
+        }
+        case 'DELETE_COLUMN': {
+            const { projectId, columnId } = action.payload;
+            const project = state.projects[projectId];
+
+            const newColumnOrder = project.columnOrder.filter(id => id !== columnId);
+            const newColumns = { ...project.columns };
+            delete newColumns[columnId];
+
+            // Clean up tasks in that column
+            const taskIdsToRemove = new Set(project.columns[columnId].taskIds);
+            const newTasks = { ...project.tasks };
+            Object.keys(newTasks).forEach(taskId => {
+                if (taskIdsToRemove.has(taskId)) {
+                    delete newTasks[taskId];
+                }
+            });
+
+            return {
+                ...state,
+                projects: {
+                    ...state.projects,
+                    [projectId]: {
+                        ...project,
+                        tasks: newTasks,
+                        columns: newColumns,
+                        columnOrder: newColumnOrder
+                    }
+                }
+            };
+        }
         case 'CLEAR_COLUMN': {
             const { projectId, columnId } = action.payload;
             const project = state.projects[projectId];

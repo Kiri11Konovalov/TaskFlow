@@ -9,7 +9,7 @@ import TaskModal from './TaskModal';
 import ConfirmModal from '../UI/ConfirmModal';
 
 import { useBoard } from '../../context/BoardContext';
-import { ArrowDown, Calendar, Trash2, Edit2 } from 'lucide-react';
+import { ArrowDown, Calendar, Trash2, Edit2, Eraser } from 'lucide-react';
 
 interface ColumnProps {
     column: ColumnType;
@@ -21,7 +21,8 @@ const Column: React.FC<ColumnProps> = ({ column, tasks, projectId }) => {
     const { dispatch } = useBoard();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+    const [isClearConfirmOpen, setIsClearConfirmOpen] = useState(false);
+    const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const [titleInput, setTitleInput] = useState(column.title);
 
@@ -36,7 +37,12 @@ const Column: React.FC<ColumnProps> = ({ column, tasks, projectId }) => {
     };
 
     const handleClear = () => {
-        setIsConfirmOpen(true);
+        setIsClearConfirmOpen(true);
+        setIsMenuOpen(false);
+    };
+
+    const handleDelete = () => {
+        setIsDeleteConfirmOpen(true);
         setIsMenuOpen(false);
     };
 
@@ -64,7 +70,12 @@ const Column: React.FC<ColumnProps> = ({ column, tasks, projectId }) => {
 
     const confirmClear = () => {
         dispatch({ type: 'CLEAR_COLUMN', payload: { projectId, columnId: column.id } });
-        setIsConfirmOpen(false);
+        setIsClearConfirmOpen(false);
+    };
+
+    const confirmDelete = () => {
+        dispatch({ type: 'DELETE_COLUMN', payload: { projectId, columnId: column.id } });
+        setIsDeleteConfirmOpen(false);
     };
 
     return (
@@ -139,8 +150,12 @@ const Column: React.FC<ColumnProps> = ({ column, tasks, projectId }) => {
                                                     Переименовать
                                                 </div>
                                                 <div className={`${styles.menuItem} ${styles.danger}`} onClick={handleClear}>
-                                                    <Trash2 size={14} />
+                                                    <Eraser size={14} />
                                                     Очистить
+                                                </div>
+                                                <div className={`${styles.menuItem} ${styles.danger}`} onClick={handleDelete}>
+                                                    <Trash2 size={14} />
+                                                    Удалить
                                                 </div>
                                             </div>
                                         </>
@@ -167,11 +182,19 @@ const Column: React.FC<ColumnProps> = ({ column, tasks, projectId }) => {
             />
 
             <ConfirmModal
-                isOpen={isConfirmOpen}
-                onClose={() => setIsConfirmOpen(false)}
+                isOpen={isClearConfirmOpen}
+                onClose={() => setIsClearConfirmOpen(false)}
                 onConfirm={confirmClear}
                 title="Очистить колонку"
                 message="Вы уверены, что хотите удалить все задачи из этой колонки? Это действие нельзя отменить."
+            />
+
+            <ConfirmModal
+                isOpen={isDeleteConfirmOpen}
+                onClose={() => setIsDeleteConfirmOpen(false)}
+                onConfirm={confirmDelete}
+                title="Удалить колонку"
+                message="Вы уверены, что хотите удалить эту колонку и ВСЕ задачи в ней? Это действие нельзя отменить."
             />
         </>
     );

@@ -17,6 +17,7 @@ import {
 } from '@dnd-kit/core';
 import TaskCard from './TaskCard';
 import { createPortal } from 'react-dom';
+import { Plus } from 'lucide-react';
 
 const dropAnimation: DropAnimation = {
     sideEffects: defaultDropAnimationSideEffects({
