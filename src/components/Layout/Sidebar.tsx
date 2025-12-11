@@ -30,7 +30,7 @@ const Sidebar = () => {
             payload: { project: newProject }
         });
 
-        // Automatically start editing the new project
+        // Автоматически начинаем редактирование нового проекта
         setEditingProjectId(newProject.id);
         setEditName(newProject.name);
     };
@@ -101,7 +101,7 @@ const Sidebar = () => {
                 try {
                     const content = event.target?.result as string;
                     const projects = JSON.parse(content);
-                    // Basic validation: check if it looks like an object of projects
+                    // Простая валидация: проверяем, что это объект
                     if (typeof projects === 'object' && projects !== null) {
                         setPendingImport(projects);
                         setIsImportConfirmOpen(true);

@@ -14,7 +14,7 @@ import { ArrowDown, Calendar, Trash2, Edit2, Eraser } from 'lucide-react';
 interface ColumnProps {
     column: ColumnType;
     tasks: Task[];
-    projectId: string; // We need projectId for dispatch
+    projectId: string; // Нам нужен projectId для dispatch
 }
 
 const Column: React.FC<ColumnProps> = ({ column, tasks, projectId }) => {

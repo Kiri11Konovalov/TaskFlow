@@ -65,7 +65,7 @@ const AppContent = () => {
                       onClick={() => {
                         dispatch({ type: 'SET_SEARCH_QUERY', payload: { query: '' } });
                       }}
-                      onMouseDown={(e) => e.preventDefault()} // Prevent blur when clicking X
+                      onMouseDown={(e) => e.preventDefault()} // Предотвращаем потерю фокуса при клике
                     />
                   )}
                 </div>

@@ -7,7 +7,7 @@ interface TaskModalProps {
     isOpen: boolean;
     onClose: () => void;
     columnId?: string;
-    task?: Task; // If provided, we are editing
+    task?: Task; // Если передана задача, значит режим редактирования
 }
 
 const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, columnId, task }) => {
@@ -22,7 +22,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, columnId, task }
             setDescription(task.description);
             setPriority(task.priority);
         } else if (isOpen && !task) {
-            // Reset for new task
+            // Сброс формы для новой задачи
             setTitle('');
             setDescription('');
             setPriority('medium');
@@ -36,7 +36,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, columnId, task }
         if (!title.trim() || !projectId) return;
 
         if (task) {
-            // Edit Mode
+            // Режим редактирования
             const updatedTask: Task = {
                 ...task,
                 title,
@@ -52,7 +52,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, columnId, task }
                 }
             });
         } else {
-            // Create Mode
+            // Режим создания
             if (!columnId) return;
 
             const newTask: Task = {

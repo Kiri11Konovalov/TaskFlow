@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import React, { createContext, useContext, useReducer } from 'react';
 import type { BoardState, Action, BoardContextType } from './types';
 
-// Начальные данные (Initial Data)
+// Начальные данные
 const initialData: BoardState = {
     currentProjectId: 'project-1',
     searchQuery: '',
@@ -171,7 +171,7 @@ const boardReducer = (state: BoardState, action: Action): BoardState => {
             const newProjects = { ...state.projects };
             delete newProjects[projectId];
 
-            // If deleting current project, switch to first available or null
+            // Если удаляем текущий проект, переключаемся на первый доступный или null
             const remainingIds = Object.keys(newProjects);
             let newCurrentId = state.currentProjectId;
             if (state.currentProjectId === projectId) {
@@ -276,7 +276,7 @@ const boardReducer = (state: BoardState, action: Action): BoardState => {
             const newColumns = { ...project.columns };
             delete newColumns[columnId];
 
-            // Clean up tasks in that column
+            // Удаляем задачи, связанные с колонкой
             const taskIdsToRemove = new Set(project.columns[columnId].taskIds);
             const newTasks = { ...project.tasks };
             Object.keys(newTasks).forEach(taskId => {
@@ -304,7 +304,7 @@ const boardReducer = (state: BoardState, action: Action): BoardState => {
             const taskIdsToRemove = new Set(project.columns[columnId].taskIds);
             const newTasks = { ...project.tasks };
 
-            // Remove tasks that are in this column
+            // Удаляем задачи, которые находятся в этой колонке
             Object.keys(newTasks).forEach(taskId => {
                 if (taskIdsToRemove.has(taskId)) {
                     delete newTasks[taskId];
