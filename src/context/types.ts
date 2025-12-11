@@ -43,6 +43,7 @@ export type Action =
     | { type: 'RENAME_COLUMN'; payload: { projectId: string; columnId: string; newTitle: string } }
     | { type: 'ADD_COLUMN'; payload: { projectId: string; title: string } }
     | { type: 'DELETE_COLUMN'; payload: { projectId: string; columnId: string } }
+    | { type: 'IMPORT_DATA'; payload: { projects: { [key: string]: Project } } }
     | { type: 'CLEAR_COLUMN'; payload: { projectId: string; columnId: string } };
 
 export interface BoardContextType {

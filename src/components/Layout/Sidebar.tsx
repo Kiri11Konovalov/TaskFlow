@@ -1,8 +1,8 @@
-import { Layout, Plus, Edit2, Trash2 } from 'lucide-react';
+import { Layout, Plus, Edit2, Trash2, Upload, Download } from 'lucide-react';
 import styles from './Layout.module.css';
 import { useBoard } from '../../context/BoardContext';
 import clsx from 'clsx';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import ConfirmModal from '../UI/ConfirmModal';
 
 const Sidebar = () => {
@@ -71,6 +71,61 @@ const Sidebar = () => {
         }
     };
 
+    const fileInputRef = useRef<HTMLInputElement>(null);
+
+    const [pendingImport, setPendingImport] = useState<any>(null);
+    const [isImportConfirmOpen, setIsImportConfirmOpen] = useState(false);
+
+    const handleExport = () => {
+        const dataStr = JSON.stringify(state.projects, null, 2);
+        const blob = new Blob([dataStr], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'taskflow.json';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+    };
+
+    const handleImportClick = () => {
+        fileInputRef.current?.click();
+    };
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                try {
+                    const content = event.target?.result as string;
+                    const projects = JSON.parse(content);
+                    // Basic validation: check if it looks like an object of projects
+                    if (typeof projects === 'object' && projects !== null) {
+                        setPendingImport(projects);
+                        setIsImportConfirmOpen(true);
+                    } else {
+                        alert('Неверный формат файла');
+                    }
+                } catch (error) {
+                    console.error('Import error:', error);
+                    alert('Ошибка при чтении файла');
+                }
+                if (fileInputRef.current) fileInputRef.current.value = '';
+            };
+            reader.readAsText(file);
+        }
+    };
+
+    const confirmImport = () => {
+        if (pendingImport) {
+            dispatch({ type: 'IMPORT_DATA', payload: { projects: pendingImport } });
+            setPendingImport(null);
+            setIsImportConfirmOpen(false);
+        }
+    };
+
     return (
         <aside className={styles.sidebar}>
             <div className={styles.logo}>
@@ -81,10 +136,25 @@ const Sidebar = () => {
             <div className={styles.projectList}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem', color: 'var(--color-text-secondary)', fontSize: '0.8rem', fontWeight: 600, padding: '0 0.5rem' }}>
                     <span>ПРОЕКТЫ</span>
-                    <button onClick={handleCreateProject} style={{ cursor: 'pointer', color: 'inherit' }} title="Создать проект">
-                        <Plus size={16} />
-                    </button>
+                    <div style={{ display: 'flex', gap: '12px' }}>
+                        <button onClick={handleCreateProject} style={{ cursor: 'pointer', color: 'inherit' }} title="Создать проект">
+                            <Plus size={16} />
+                        </button>
+                        <button onClick={handleImportClick} style={{ cursor: 'pointer', color: 'inherit' }} title="Импорт проектов">
+                            <Upload size={16} />
+                        </button>
+                        <button onClick={handleExport} style={{ cursor: 'pointer', color: 'inherit' }} title="Экспорт проектов">
+                            <Download size={16} />
+                        </button>
+                    </div>
                 </div>
+                <input
+                    type="file"
+                    ref={fileInputRef}
+                    style={{ display: 'none' }}
+                    accept=".json"
+                    onChange={handleFileChange}
+                />
 
                 {Object.values(state.projects).map((project) => (
                     <div
@@ -149,6 +219,14 @@ const Sidebar = () => {
                 onConfirm={confirmDelete}
                 title="Удалить проект?"
                 message="Вы уверены, что хотите удалить этот проект? Все задачи в нем будут потеряны безвозвратно."
+            />
+            <ConfirmModal
+                isOpen={isImportConfirmOpen}
+                onClose={() => { setIsImportConfirmOpen(false); setPendingImport(null); }}
+                onConfirm={confirmImport}
+                title="Импортировать данные?"
+                message="ВНИМАНИЕ: Это действие ПОЛНОСТЬЮ заменит все текущие проекты и задачи на данные из файла. Это действие нельзя отменить!"
+                confirmText="Подтвердить"
             />
         </aside>
     );

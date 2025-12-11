@@ -7,9 +7,10 @@ interface ConfirmModalProps {
     onConfirm: () => void;
     title: string;
     message: string;
+    confirmText?: string;
 }
 
-const ConfirmModal: React.FC<ConfirmModalProps> = ({ isOpen, onClose, onConfirm, title, message }) => {
+const ConfirmModal: React.FC<ConfirmModalProps> = ({ isOpen, onClose, onConfirm, title, message, confirmText = 'Удалить' }) => {
     return (
         <Modal isOpen={isOpen} onClose={onClose} title={title}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
@@ -44,7 +45,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({ isOpen, onClose, onConfirm,
                             cursor: 'pointer',
                         }}
                     >
-                        Удалить
+                        {confirmText}
                     </button>
                 </div>
             </div>

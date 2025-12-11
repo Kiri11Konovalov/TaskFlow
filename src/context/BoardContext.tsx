@@ -301,12 +301,6 @@ const boardReducer = (state: BoardState, action: Action): BoardState => {
         case 'CLEAR_COLUMN': {
             const { projectId, columnId } = action.payload;
             const project = state.projects[projectId];
-
-            // We should also delete the tasks from the tasks object to avoid orphans,
-            // OR just remove them from the column if we want to keep them in "archive" (but we don't have archive).
-            // For now, let's just empty the column. Real deletion of tasks is complex if they are only referenced here.
-            // Actually, best practice is to remove them from project.tasks too to clean up.
-
             const taskIdsToRemove = new Set(project.columns[columnId].taskIds);
             const newTasks = { ...project.tasks };
 
@@ -333,6 +327,15 @@ const boardReducer = (state: BoardState, action: Action): BoardState => {
                         },
                     },
                 },
+            };
+        }
+        case 'IMPORT_DATA': {
+            const { projects } = action.payload;
+            const newCurrentId = Object.keys(projects)[0] || null;
+            return {
+                ...state,
+                projects: projects,
+                currentProjectId: newCurrentId,
             };
         }
         default:

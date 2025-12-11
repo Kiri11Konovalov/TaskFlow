@@ -22,7 +22,11 @@ const AppContent = () => {
       <Sidebar />
       <main className={styles.main}>
         <header className={styles.header}>
-          <div className={styles.headerTitle}>Задачи</div>
+          <div className={styles.headerTitle}>
+            {state.currentProjectId && state.projects[state.currentProjectId]
+              ? state.projects[state.currentProjectId].name
+              : 'Задачи'}
+          </div>
 
           <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
             {showSearch ? (
