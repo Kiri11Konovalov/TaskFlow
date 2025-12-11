@@ -1,22 +1,89 @@
-import { Layout, Plus } from 'lucide-react';
+import { Layout, Plus, Edit2, Trash2 } from 'lucide-react';
 import styles from './Layout.module.css';
 import { useBoard } from '../../context/BoardContext';
 import clsx from 'clsx';
+import { useState } from 'react';
+import ConfirmModal from '../UI/ConfirmModal';
 
 const Sidebar = () => {
     const { state, dispatch } = useBoard();
+    const [editingProjectId, setEditingProjectId] = useState<string | null>(null);
+    const [editName, setEditName] = useState('');
+    const [deleteProjectId, setDeleteProjectId] = useState<string | null>(null);
+
+    const handleCreateProject = () => {
+        const newProject = {
+            id: `project-${Date.now()}`,
+            name: 'Новый проект',
+            description: '',
+            columns: {
+                'col-1': { id: 'col-1', title: 'К выполнению', taskIds: [] },
+                'col-2': { id: 'col-2', title: 'В работе', taskIds: [] },
+                'col-3': { id: 'col-3', title: 'Готово', taskIds: [] },
+            },
+            columnOrder: ['col-1', 'col-2', 'col-3'],
+            tasks: {}
+        };
+
+        dispatch({
+            type: 'ADD_PROJECT',
+            payload: { project: newProject }
+        });
+
+        // Automatically start editing the new project
+        setEditingProjectId(newProject.id);
+        setEditName(newProject.name);
+    };
+
+    const startEditing = (e: React.MouseEvent, project: { id: string, name: string }) => {
+        e.stopPropagation();
+        setEditingProjectId(project.id);
+        setEditName(project.name);
+    };
+
+    const saveEditing = (e?: React.FormEvent) => {
+        if (e) e.preventDefault();
+        if (editingProjectId && editName.trim()) {
+            dispatch({
+                type: 'EDIT_PROJECT',
+                payload: { projectId: editingProjectId, name: editName.trim() }
+            });
+        }
+        setEditingProjectId(null);
+    };
+
+    const cancelEditing = () => {
+        setEditingProjectId(null);
+    };
+
+    const requestDelete = (e: React.MouseEvent, projectId: string) => {
+        e.stopPropagation();
+        setDeleteProjectId(projectId);
+    };
+
+    const confirmDelete = () => {
+        if (deleteProjectId) {
+            dispatch({
+                type: 'DELETE_PROJECT',
+                payload: { projectId: deleteProjectId }
+            });
+            setDeleteProjectId(null);
+        }
+    };
 
     return (
         <aside className={styles.sidebar}>
             <div className={styles.logo}>
-                <Layout size={24} className="text-indigo-500" style={{ color: 'var(--color-accent)' }} />
+                <Layout size={24} style={{ color: 'var(--color-accent)' }} />
                 <span>TaskFlow</span>
             </div>
 
             <div className={styles.projectList}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem', color: 'var(--color-text-secondary)', fontSize: '0.8rem', fontWeight: 600, padding: '0 0.5rem' }}>
                     <span>ПРОЕКТЫ</span>
-                    <Plus size={16} style={{ cursor: 'pointer' }} />
+                    <button onClick={handleCreateProject} style={{ cursor: 'pointer', color: 'inherit' }} title="Создать проект">
+                        <Plus size={16} />
+                    </button>
                 </div>
 
                 {Object.values(state.projects).map((project) => (
@@ -27,11 +94,62 @@ const Sidebar = () => {
                         })}
                         onClick={() => dispatch({ type: 'SET_CURRENT_PROJECT', payload: { projectId: project.id } })}
                     >
-                        <span style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: state.currentProjectId === project.id ? 'var(--color-accent)' : 'var(--color-bg-card)' }}></span>
-                        {project.name}
+                        {editingProjectId === project.id ? (
+                            <form onSubmit={saveEditing} onClick={(e) => e.stopPropagation()} style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+                                <input
+                                    autoFocus
+                                    value={editName}
+                                    onChange={(e) => setEditName(e.target.value)}
+                                    onBlur={() => saveEditing()}
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'Escape') cancelEditing();
+                                    }}
+                                    style={{
+                                        border: '1px solid var(--color-accent)',
+                                        borderRadius: 'var(--radius-sm)',
+                                        padding: '2px 4px',
+                                        background: 'var(--color-bg-primary)',
+                                        color: 'var(--color-text-primary)',
+                                        width: '100%',
+                                        fontSize: 'inherit',
+                                        outline: 'none'
+                                    }}
+                                />
+                            </form>
+                        ) : (
+                            <>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-sm)', flex: 1, minWidth: 0 }}>
+                                    <span style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: state.currentProjectId === project.id ? 'var(--color-accent)' : 'var(--color-bg-card)', flexShrink: 0 }}></span>
+                                    <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{project.name}</span>
+                                </div>
+                                <div className={styles.projectActions}>
+                                    <button
+                                        onClick={(e) => startEditing(e, project)}
+                                        style={{ color: 'var(--color-text-secondary)', opacity: 0.6, cursor: 'pointer', padding: 2 }}
+                                        title="Редактировать"
+                                    >
+                                        <Edit2 size={14} />
+                                    </button>
+                                    <button
+                                        onClick={(e) => requestDelete(e, project.id)}
+                                        style={{ color: 'var(--color-text-secondary)', opacity: 0.6, cursor: 'pointer', padding: 2 }}
+                                        title="Удалить"
+                                    >
+                                        <Trash2 size={14} />
+                                    </button>
+                                </div>
+                            </>
+                        )}
                     </div>
                 ))}
             </div>
+            <ConfirmModal
+                isOpen={!!deleteProjectId}
+                onClose={() => setDeleteProjectId(null)}
+                onConfirm={confirmDelete}
+                title="Удалить проект?"
+                message="Вы уверены, что хотите удалить этот проект? Все задачи в нем будут потеряны безвозвратно."
+            />
         </aside>
     );
 };

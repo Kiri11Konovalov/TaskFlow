@@ -41,6 +41,18 @@
     color: var(--color-text-secondary);
     transition: all var(--transition-fast);
     cursor: pointer;
+    justify-content: space-between;
+}
+
+.projectActions {
+    display: flex;
+    gap: 4px;
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+}
+
+.projectItem:hover .projectActions {
+    opacity: 1;
 }
 
 .projectItem:hover {

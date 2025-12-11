@@ -141,6 +141,48 @@ const boardReducer = (state: BoardState, action: Action): BoardState => {
                 },
             };
         }
+        case 'ADD_PROJECT': {
+            const { project } = action.payload;
+            return {
+                ...state,
+                projects: {
+                    ...state.projects,
+                    [project.id]: project,
+                },
+                currentProjectId: project.id,
+            };
+        }
+        case 'EDIT_PROJECT': {
+            const { projectId, name } = action.payload;
+            return {
+                ...state,
+                projects: {
+                    ...state.projects,
+                    [projectId]: {
+                        ...state.projects[projectId],
+                        name: name,
+                    },
+                },
+            };
+        }
+        case 'DELETE_PROJECT': {
+            const { projectId } = action.payload;
+            const newProjects = { ...state.projects };
+            delete newProjects[projectId];
+
+            // If deleting current project, switch to first available or null
+            const remainingIds = Object.keys(newProjects);
+            let newCurrentId = state.currentProjectId;
+            if (state.currentProjectId === projectId) {
+                newCurrentId = remainingIds.length > 0 ? remainingIds[0] : null;
+            }
+
+            return {
+                ...state,
+                projects: newProjects,
+                currentProjectId: newCurrentId,
+            };
+        }
         default:
             return state;
     }
